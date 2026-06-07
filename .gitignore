@@ -216,3 +216,16 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+
+
+
+# Project dirs
+
+output/
+data_in/
+logs/
+
+# Project config files
+
+pipeline/*.yaml
