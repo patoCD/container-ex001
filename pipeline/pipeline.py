@@ -24,19 +24,19 @@ from lib_utils import find_project_root, setup_logging, opt_get, find_file, info
 
 @retry(retries=3)
 def extract(config):
-    logging.info("Extract step started")
+    logging.info("Inicio Extract")
 
     in_path = find_file( config["data"].get("source") )
     logging.debug("Ruta datos de entrada: %s", in_path)
     
 
     if not in_path.exists() or in_path.stat().st_size == 0:
-        raise ValueError("No data extracted")
+        raise ValueError("No se extrajo data")
 
     df = pd.read_csv(in_path)
     info_desc(df)
 
-    logging.info("Extract step completed")
+    logging.info("Extract completado")
     return df
 
 
@@ -44,7 +44,7 @@ def extract(config):
 
 @retry(retries=2)
 def transform(data, config):
-    logging.info("Transform step started")
+    logging.info("Inicio Transform")
 
     data = data.copy()  # avoid mutating input unexpectedly
 
@@ -52,35 +52,37 @@ def transform(data, config):
     data["year"] = config.get("year")
     logging.debug(f"Columns: {list(data.columns)}")
 
-    logging.info("Transform step completed")
+    logging.info("Transform completado")
     return data
 
 
 @retry(retries=3)
 def load(data, config, out_dir = "output"):
-    logging.info("Load step started")
+    logging.info("Inicio load")
 
     # input_file = config.get("source")
     output_path = ROOT / out_dir
 
-    os.makedirs(output_path, exist_ok=True)
+    os.makedirs(output_path, exist_ok=True)  
 
-    data.to_parquet(output_path / config.get("output") )
+    output_file = output_path / f"pipeline_res_{time.strftime('%Y%m%d_%H%M%S')}.parquet"
 
-    logging.info(f"Data written to {output_path}")
+    data.to_parquet( output_file )
+
+    logging.info(f"Data guardada en {output_file}")
 
 
 # -------------------------
 # PIPELINE
 # -------------------------
 def run_pipeline(config):
-    logging.info("Pipeline started")
+    logging.info("Inicio Pipeline")
 
     data = extract(config)
     tform_data = transform(data, config["pipeline"])
     load(tform_data, config["data"])
 
-    logging.info("Pipeline finished successfully")
+    logging.info("Pipeline finalizado")
 
 
 # -------------------------
