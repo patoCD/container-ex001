@@ -136,13 +136,14 @@ def opt_get(name, default=None, cast=str):
 
     parser.add_argument(
         f"--{name}",
+        # dest=name.replace("-", "_"),
         default=default,
         type=cast
     )
 
     args, _ = parser.parse_known_args()
 
-    return getattr(args, name)
+    return getattr(args, name.replace("-", "_"))
 
 
 def find_file(filename: str, root_dir = find_project_root()) -> Path:
