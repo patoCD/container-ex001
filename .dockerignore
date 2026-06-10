@@ -1,0 +1,40 @@
+#
+# .dockerignore
+#
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environments
+.venv/
+venv/
+
+# Tooling
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Git
+.git/
+.github/
+
+# Local config / secrets
+.env
+
+# Builds
+dist/
+build/
+
+# Docs (optional)
+docs/
+*.md
+
+
+# Project dirs
+
+output/
+logs/
+tests/
